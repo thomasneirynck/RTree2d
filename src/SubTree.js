@@ -143,7 +143,6 @@ define([
       }
       bestNode._addChild(entry);
       bestNode._propagateSplit(treeBase);
-
     },
 
     _propagateSplit: function(treeBase) {
@@ -152,7 +151,7 @@ define([
       while (node && node.size > node.branchingFactor) {
         splitNode = node._split();
         if (node.parent) {
-          pushNodeOnLinkedList(node.parent, splitNode);
+          node.parent._pushNodeOnLinkedList(splitNode);
         } else {
           treeBase._growTree(node, splitNode);
         }
@@ -169,7 +168,7 @@ define([
       newHead.__nextSibling.__previousSibling = newHead;
       this.__firstChild = newHead;
       newHead.__previousSibling = null;
-      newHead.this = this;
+      newHead.parent = this;
       this.size += 1;
     },
 
@@ -177,7 +176,7 @@ define([
       this.__firstChild = newHead;
       newHead.__previousSibling = null;
       newHead.__nextSibling = null;
-      newHead.this = this;
+      newHead.parent = this;
       this.size = 1;
     },
 
@@ -185,13 +184,8 @@ define([
 
       if (this.__firstChild === child) {
         this.__firstChild = child.__nextSibling;
-        if (this.__firstChild) {
-          this.__firstChild.__previousSibling = null;
-        }
       } else {
-        if (child.__previousSibling) {
-          child.__previousSibling.__nextSibling = child.__nextSibling;
-        }
+        child.__previousSibling.__nextSibling = child.__nextSibling;
         if (child.__nextSibling) {
           child.__nextSibling.__previousSibling = child.__previousSibling;
         }
@@ -215,8 +209,6 @@ define([
       node2._addChild(this._seed2);
 
       reassignRemainingToSeeds(firstUnassigned, this, node2);
-      this._seed1 = this;
-      this._seed2 = node2;
 
       return node2;
 
