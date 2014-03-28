@@ -304,22 +304,23 @@ define([
       node2.leaf = this.leaf;
     },
 
-    _removeChild: function(nodeToRemove, treebase) {
+    _removeChild: function(child, treebase) {
 
       //travel up the tree once. adjust the bounds of the parent, and remove nodes if necessary.
       var node = this;
       do {
-        if (nodeToRemove) {
-          nodeToRemove.parent._removeNodeFromLinkedList(nodeToRemove);
-          nodeToRemove.parent = null;
-          nodeToRemove.parent.size -= 1;
+        if (child) {
+          node._removeNodeFromLinkedList(child);
+          node.size -= 1;
+          child.parent = null;
         }
         node._fitBounds();
-        nodeToRemove = (node.size === 0) ? node : null;
+
+        child = (node.size === 0) ? node : null;
         node = node.parent;
       } while (node);
 
-      if (nodeToRemove) {//We reached the top, which appears to be empty.
+      if (child) {//We reached the top, which appears to be empty.
         treebase._root = null;
         treebase._size = 0;
       }
