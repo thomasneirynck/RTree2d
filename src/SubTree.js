@@ -105,7 +105,7 @@ define([
       var ty = y + h;
       var tmp;
       var searchNode = this;
-      while (searchNode) {
+      do {
         if (searchNode.leaf) {
           searchNode._callWhenInteracts(x, y, tx, ty, callback);
         } else {
@@ -114,7 +114,7 @@ define([
         tmp = searchNode.__nextSearch;
         searchNode.__nextSearch = null;//kill the dangling pointer
         searchNode = tmp;
-      }
+      } while (searchNode);
 
     },
 
@@ -151,7 +151,7 @@ define([
       while (node && node.size > node.branchingFactor) {
         splitNode = node._split();
         if (node.parent) {
-          node.parent._pushNodeOnLinkedList(splitNode);
+          node.parent._addChild(splitNode);
         } else {
           treeBase._growTree(node, splitNode);
         }
@@ -168,20 +168,15 @@ define([
       newHead.__nextSibling.__previousSibling = newHead;
       this.__firstChild = newHead;
       newHead.__previousSibling = null;
-      newHead.parent = this;
-      this.size += 1;
     },
 
     _setFirstNodeInLinkedList: function(newHead) {
       this.__firstChild = newHead;
       newHead.__previousSibling = null;
       newHead.__nextSibling = null;
-      newHead.parent = this;
-      this.size = 1;
     },
 
     _removeNodeFromLinkedList: function(child) {
-
       if (this.__firstChild === child) {
         this.__firstChild = child.__nextSibling;
       } else {
@@ -192,7 +187,6 @@ define([
       }
       child.__nextSibling = null;
       child.__previousSibling = null;
-      this.size -= 1;
     },
 
     _split: function() {
@@ -312,33 +306,35 @@ define([
 
     _removeChild: function(nodeToRemove, treebase) {
 
-      //travel up the tree once. adjust the bounds of the parent, and remove node if necessary.
-
+      //travel up the tree once. adjust the bounds of the parent, and remove nodes if necessary.
       var node = this;
-
-      while (node) {
+      do {
         if (nodeToRemove) {
           nodeToRemove.parent._removeNodeFromLinkedList(nodeToRemove);
+          nodeToRemove.parent = null;
+          nodeToRemove.parent.size -= 1;
         }
         node._fitBounds();
         nodeToRemove = (node.size === 0) ? node : null;
         node = node.parent;
-      }
+      } while (node);
 
       if (nodeToRemove) {//We reached the top, which appears to be empty.
         treebase._root = null;
         treebase._size = 0;
       }
-
     },
 
     _addChild: function(node) {
       if (this.__firstChild) {
         this._pushNodeOnLinkedList(node);
+        this.size += 1;
       } else {
         this._setFirstNodeInLinkedList(node);
+        this.size = 1;
         this.reset();
       }
+      node.parent = this;
       this.include(node.l, node.b, node.r, node.t);
     }
 
