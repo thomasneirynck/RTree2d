@@ -136,9 +136,6 @@ define([
         }
         child = child.__nextSibling;
       }
-      if (!bestNode) {
-        throw 'somthing is rotten. should have children';
-      }
       return bestNode;
     },
 
@@ -149,6 +146,9 @@ define([
       while (!bestNode.leaf) {
         bestNode.include(x, y, entry.r, entry.t);
         bestNode = bestNode._selectBestInsertion(x, y, entry.r, entry.t);
+      }
+      if (!bestNode) {
+        console.error('sometihng is rotten. should have children');
       }
       bestNode._addChild(entry);
       bestNode._propagateSplit(treeBase);

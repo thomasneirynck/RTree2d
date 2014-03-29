@@ -133,13 +133,12 @@ define([
       rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     }
 
-//    rt._root.__validate();
 
     var size = rt.size();
     ob = OBS[0];
     var r = rt.remove(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     equal(rt.size(), size - 1, 'should have removed one');
-//    rt._root.__validate();
+    rt._root.__validate();
 
     //try remove the same
     var r = rt.remove(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
@@ -194,9 +193,16 @@ define([
 
     var total = 100;
     var ob;
+    var obs = [];
     for (var i = 0; i < total; i += 1) {
       ob = randomOb();
-      rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
+      obs.push(ob);
+      try {
+        rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
+      } catch (e) {
+        console.log('breaking ob', obs);
+        throw e;
+      }
     }
 
     equal(rt.size(), total, "should keep track of size (" + total + ")");
@@ -216,6 +222,7 @@ define([
     for (var i = 0; i < total; i += 1) {
       ob = randomObDub();
       rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
+//      rt._root.__validate();
     }
     rt._root.__validate();
     console.log('inserted', total);
