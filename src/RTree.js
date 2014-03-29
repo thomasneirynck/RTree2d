@@ -180,10 +180,12 @@ define(['./SubTree', './type'], function(SubTree, type) {
      * @function
      */
     remove: function(object, x, y, w, h) {
+      console.log('this.size before', this.size());
       var removed = this._root._remove(object, x, y, w, h, this);
       if (removed) {
         this._size -= 1;
       }
+      console.log('after', this.size());
       return this;
     }
 

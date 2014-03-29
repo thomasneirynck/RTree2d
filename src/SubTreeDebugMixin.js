@@ -82,8 +82,8 @@ define([
     },
 
     __validateChildren: function() {
-      this.__getChildren().forEach(function(chlid) {
-        chlid.__validate() && chlid.__validate();
+      this.__getChildren().forEach(function(child) {
+        child.__validate && child.__validate();
       });
     },
 

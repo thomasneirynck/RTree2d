@@ -4,7 +4,7 @@ define([
 
   module("RTree");
 
-  var obs = [
+  var OBS = [
     {"l": 20, "b": 161, "r": 26, "t": 161},
     {"l": -429, "b": 451, "r": -427, "t": 452},
     {"l": 365, "b": 236, "r": 367, "t": 236},
@@ -40,8 +40,10 @@ define([
     var ob = {};
     ob.l = ((Math.random() * 1000) - 500);
     ob.b = ((Math.random() * 1000) - 500);
-    ob.r = ob.l + (Math.random() * 10);
-    ob.t = ob.b + (Math.random() * 10);
+    ob.w = (Math.random() * 10);
+    ob.h = (Math.random() * 10);
+    ob.r = ob.l + ob.w;
+    ob.t = ob.b + ob.h;
     return ob;
   }
 
@@ -110,11 +112,11 @@ define([
 
     var b = Date.now();
     var ob;
-    for (var i = 0; i < obs.length; i += 1) {
-      ob = obs[i];
+    for (var i = 0; i < OBS.length; i += 1) {
+      ob = OBS[i];
       rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     }
-    equal(rt.size(), obs.length, "should keep track of size (" + obs.length + ")");
+    equal(rt.size(), OBS.length, "should keep track of size (" + OBS.length + ")");
 
 
   });
@@ -126,15 +128,15 @@ define([
     });
 
     var ob;
-    for (var i = 0; i < obs.length; i += 1) {
-      ob = obs[i];
+    for (var i = 0; i < OBS.length; i += 1) {
+      ob = OBS[i];
       rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     }
 
 //    rt._root.__validate();
 
     var size = rt.size();
-    ob = obs[0];
+    ob = OBS[0];
     var r = rt.remove(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     equal(rt.size(), size - 1, 'should have removed one');
 //    rt._root.__validate();
@@ -153,32 +155,33 @@ define([
     });
 
     var ob;
-    for (var i = 0; i < obs.length; i += 1) {
-      ob = obs[i];
-      rt.insert(ob, ob);
+    for (var i = 0; i < OBS.length; i += 1) {
+      ob = OBS[i];
+      rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     }
 
     rt._root.__validate();
+    equal(rt.size(), OBS.length, "all ekements should have been inserted");
 
-    for (var i = 0; i < obs.length; i += 1) {
-      ob = obs[i];
-      rt.removeObject(ob, ob);
+    for (var i = 0; i < OBS.length; i += 1) {
+      ob = OBS[i];
+      rt.remove(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
       if (rt._root) {
         rt._root.__validate();
       }
     }
 
-    equal(0, rt.size(), "all ekements should have been removed");
-    for (var i = 0; i < obs.length; i += 1) {
-      ob = obs[i];
-      rt.insert(ob, ob);
+    equal(rt.size(), 0, "all ekements should have been removed");
+    for (var i = 0; i < OBS.length; i += 1) {
+      ob = OBS[i];
+      rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
       if (rt._root) {
         rt._root.__validate();
       }
     }
     equal(20, rt.size(), "all ekements should have been inserted again");
 
-    var r = rt.search(obs[0]);
+    var r = rt.search(OBS[0]);
     console.log('r', r);
 
   });
@@ -193,7 +196,7 @@ define([
     var ob;
     for (var i = 0; i < total; i += 1) {
       ob = randomOb();
-      rt.insert(ob, ob);
+      rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
     }
 
     equal(rt.size(), total, "should keep track of size (" + total + ")");
@@ -203,7 +206,6 @@ define([
   test("add - many (random)", function() {
 
     var bf = 12;
-    console.log('brf', bf);
     var rt = new RTree({
       bf: bf
     });
@@ -213,7 +215,7 @@ define([
 
     for (var i = 0; i < total; i += 1) {
       ob = randomObDub();
-      rt.insert(ob, ob);
+      rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
     }
     rt._root.__validate();
     console.log('inserted', total);

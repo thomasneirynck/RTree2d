@@ -175,19 +175,22 @@ define([
     _pushNodeOnLinkedList: function(newHead) {
       newHead.__nextSibling = this.__firstChild;
       newHead.__nextSibling.__previousSibling = newHead;
-      this.__firstChild = newHead;
       newHead.__previousSibling = null;
+      this.__firstChild = newHead;
     },
 
     _setFirstNodeInLinkedList: function(newHead) {
-      this.__firstChild = newHead;
       newHead.__previousSibling = null;
       newHead.__nextSibling = null;
+      this.__firstChild = newHead;
     },
 
     _removeNodeFromLinkedList: function(child) {
       if (this.__firstChild === child) {
         this.__firstChild = child.__nextSibling;
+        if (this.__firstChild) {
+          this.__firstChild.__previousSibling = null;
+        }
       } else {
         child.__previousSibling.__nextSibling = child.__nextSibling;
         if (child.__nextSibling) {
@@ -331,7 +334,6 @@ define([
 
       if (child) {//We reached the top, which appears to be empty.
         treebase._root = null;
-        treebase._size = 0;
       }
     },
 
