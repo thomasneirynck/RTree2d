@@ -1,0 +1,31 @@
+{
+  "name": "RTree2d",
+  "version": "0.0.0",
+  "authors": [
+    "thomas@neirynck.us"
+  ],
+  "description": "Fast and memory-efficient RTree for the browser and node.",
+  "main": "RTree.js",
+  "keywords": [
+    "RTree",
+    "AMD",
+    "GIS",
+    "Visualization",
+    "spatial",
+    "data",
+    "structure",
+    "index"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "qunit": "~1.14.0",
+    "requirejs": "~2.1.11"
+  }
+}
