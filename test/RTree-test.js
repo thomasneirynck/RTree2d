@@ -27,25 +27,17 @@ define([
     {"l": 316, "b": 446, "r": 320, "t": 455}
   ];
 
-  function randomOb() {
+  function randomeOb() {
     var ob = {};
     ob.l = Math.floor((Math.random() * 1000) - 500);
     ob.b = Math.floor((Math.random() * 1000) - 500);
-    ob.r = ob.l + Math.round(Math.random() * 10);
-    ob.t = ob.b + Math.round(Math.random() * 10);
-    return ob;
-  }
-
-  function randomObDub() {
-    var ob = {};
-    ob.l = ((Math.random() * 1000) - 500);
-    ob.b = ((Math.random() * 1000) - 500);
     ob.w = (Math.random() * 10);
     ob.h = (Math.random() * 10);
     ob.r = ob.l + ob.w;
     ob.t = ob.b + ob.h;
     return ob;
   }
+
 
 
   test("insert", function() {
@@ -195,7 +187,7 @@ define([
     var ob;
     var obs = [];
     for (var i = 0; i < total; i += 1) {
-      ob = randomOb();
+      ob = randomeOb();
       obs.push(ob);
       try {
         rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
@@ -220,7 +212,7 @@ define([
     var ob;
 
     for (var i = 0; i < total; i += 1) {
-      ob = randomObDub();
+      ob = randomeOb();
       rt.insert(ob, ob.l, ob.b, ob.w, ob.h);
 //      rt._root.__validate();
     }
