@@ -22,15 +22,13 @@ define([
 
 
   function reassignRemainingToSeeds(node, seed1, seed2) {
-    var cost1, cost2, next;
+    var next;
     while (node) {
       next = node.__nextSibling;
-      cost1 = seed1.expansionCost(node.l, node.b, node.r, node.t);
-      cost2 = seed2.expansionCost(node.l, node.b, node.r, node.t);
-      if (cost1 < cost2) {
+      if (seed1.expansionCost(node.l, node.b, node.r, node.t) < seed2.expansionCost(node.l, node.b, node.r, node.t)) {
         seed1._addChild(node);
       } else {
-        seed1._addChild(node);
+        seed2._addChild(node);
       }
       node = next;
     }

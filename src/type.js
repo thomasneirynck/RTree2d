@@ -2,7 +2,6 @@ define([], function() {
 
   "use strict";
 
-
   function mixin(destination) {
     var sources = Array.prototype.slice.call(arguments, 1);
     sources.forEach(function(source) {
@@ -30,9 +29,6 @@ define([], function() {
       //ensure 2-way binding (so an object's constructor and that constructor's prototype match)
       proto.constructor.prototype = proto;
 
-      //lock down prototypes
-      Object.freeze(proto);
-      Object.freeze(proto.constructor);
     } catch (e) {
       console.error("type: Cannot make constructor function and prototype with ", arguments);
       throw e;

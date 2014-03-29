@@ -1,0 +1,14 @@
+html, body {
+    /*font from http://cssfontstack.com/*/
+    font-family: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+}
+
+#page {
+    width: 95%;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+
+p {
+
+}

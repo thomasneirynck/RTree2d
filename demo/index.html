@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Javascript RTree (AMD module)</title>
+    <link rel="stylesheet" type="text/css" href="./default.css">
+    <!--amdloader-->
+    <script type="text/javascript" src="../bower_components/requirejs/require.js"></script>
+    <!--amdloader-->
+</head>
+<body>
+
+<div id="page">
+
+<article>
+<h1>Javascript RTree</h1>
+
+
+<p>
+    A fast and memory-efficient RTree implementation for Javascript.
+    It can be loaded with any AMD-loader (e.g. <a href="http://requirejs.org">requirejs</a>) , in the browser or in
+    node.
+</p>
+
+<h2>Download</h2>
+
+<p>
+    Download the AMD module <a href="./amd/RTree.js">RTree.js</a>.
+    <br/>
+    Find the <a href="https://bitbucket.org/trgn/rtree">source code repository</a> on bitbucket.
+</p>
+
+<h2>Features</h2>
+
+<p>
+<ol>
+    <li>It is <strong>fast</strong>: search and insertion are very fast.
+        It performs up to 50000-100000 insertions per second on modern browsers.
+    </li>
+    <li>It is <strong>memory-efficient</strong>: since RTree's are often used in visualization software, you do
+        not want low level components to spam memory for the garbage collector to clean up. This implementation has
+        a very conservative memory usage profile.
+    </li>
+    <li>It is completely standalone. No need to create helper objects to model your domain objects in a different way
+    </li>
+</ol>
+
+</p>
+
+<h2>Documentation</h2>
+
+<p>
+    <span><a href="./jsdoc">API Docs + installatino instructions</a></span>
+    <span><a href="https://bitbucket.org/trgn/rtree">Repository + readme</a></span>
+</p>
+
+<h2>Try it!</h2>
+
+<div>
+    Insert objects in the tree, as well as perform searches. Check the checkbox to visualize the tree.
+    Time measurements only include RTree operations and not the rendering of the tree.
+</div>
+<div id="sample_app">
+
+    <div>
+        <div style="float: left">
+            <p>
+                <input type="button" id="reset" value="Reset the tree"></input>
+            </p>
+
+            <p>
+                <select id="insertnr">
+                    <option>1</option>
+                    <option selected="selected">10</option>
+                    <option>100</option>
+                    <option>1000</option>
+                    <option>10000</option>
+                    <option>100000</option>
+                    <option value="1000000">1000000 (danger, high voltage!)</option>
+                </select>
+
+
+                <input type="button" id="insert" value="insert x"></input>
+            </p>
+            <p>
+
+                <input type="button" id="search" value="perform 10000 searches">
+            </p>
+
+            <p>
+                Show the current tree (not for the faint of heart): <input type="checkbox" id="draw" value="draw"
+                                                                           checked="true"></input>
+            </p>
+        </div>
+        <div id="message" style="float:right; margin: 10px"></div>
+    </div>
+    <div style="clear: both"></div>
+    <div>
+        <p>
+            <canvas width="700px" height="600px" style="border: 1px solid black" id="canv"></canvas>
+        </p>
+    </div>
+
+    <script type="text/javascript">
+
+        require.config({
+            baseUrl: '.',
+            paths: {
+                RTree: /*moduleroot*/'../src'/*moduleroot*/
+            }
+        });
+
+
+        require([/*modulepath*/"RTree/RTree"/*modulepath*/], function(RTree) {
+
+            var context2d = document.getElementById('canv').getContext('2d');
+            var obs = [];
+            var nr = document.getElementById('insertnr');
+            var draw = document.getElementById('draw');
+            draw.onclick = show;
+
+            function show() {
+                if (draw.checked && tree.size() > 0) {
+                    context2d.canvas.style.visibility = 'visible';
+                    context2d.clearRect(0, 0, context2d.canvas.width, context2d.canvas.height);
+                    tree.draw(context2d);
+                } else {
+                    context2d.canvas.style.visibility = 'hidden';
+                }
+            }
+
+            function reset() {
+                tree = new RTree({
+                    branchingFactor: 16
+                });
+                canv.width = document.getElementById('page').offsetWidth;
+                show();
+            }
+
+            //creates function to generate random number within ranges.
+            function genRandom(from, to) {
+                var l = to - from;
+                return function() {
+                    return (Math.random() * l) + from;
+                };
+            }
+
+            //wire reset.
+            var resetb = document.getElementById('reset');
+            resetb.onclick = reset;
+            reset();//init at least once.
+
+
+            var inb = document.getElementById('insert');
+            inb.onclick = function() {
+
+                var total = nr.options[nr.selectedIndex].value;
+                var boxwidth = 10;
+                var anchorX = genRandom(10, context2d.canvas.width - boxwidth - 10);
+                var anchorY = genRandom(10, context2d.canvas.height - boxwidth - 10);
+                var size = genRandom(0, boxwidth);
+
+                function randomOb() {
+                    return {
+                        x: anchorX(),
+                        y: anchorY(),
+                        w: size(),
+                        h: size()
+                    };
+                }
+
+
+                obs.length = 0;
+                window.obs = obs;
+                var ob, i;
+                for (i = 0; i < total; i += 1) {
+                    obs.push(randomOb());
+                }
+
+                //insertion. we measure time here.
+                var start = new Date().getTime();
+                for (i = 0; i < total; i += 1) {
+                    ob = obs[i];
+                    tree.insert(ob, ob.x, ob.y, ob.w, ob.h);
+                }
+                var delta = (new Date().getTime()) - start;
+
+                var av = delta / obs.length;
+                var deltas = delta;
+                var message = ["Total time: " + (deltas) + "ms",
+                    " Avg time per insert: " + deltas / obs.length + "ms",
+                    "Total # insertions: " + obs.length,
+                    "Tree size: " + tree.size()].join('<br/>');
+                document.getElementById("message").innerHTML = message;
+
+                show();
+                window.show = show;
+
+            };
+
+
+            var search = document.getElementById('search');
+            search.onclick = function() {
+
+
+                var total = nr.options[nr.selectedIndex].value;
+                var boxdim = 100;
+                var anchorX = genRandom(10, context2d.canvas.width - boxdim - 10);
+                var anchorY = genRandom(10, context2d.canvas.height - boxdim - 10);
+                var size = genRandom(0, boxdim);
+
+                function randomSearchOb() {
+                    var a = {};
+                    a.x = anchorX();
+                    a.y = anchorY();
+                    var size = genRandom(0, 30);
+                    a.w = size();
+                    a.h = size();
+                    return a;
+                }
+
+                //create some search objes
+                var totalsearches = 10000;
+                var searches = [];
+                var i;
+                for (i = 0; i < totalsearches; i += 1) {
+                    searches[i] = randomSearchOb();
+                }
+
+
+                var count = 0;
+                var countHits = function(it) {
+                    count += 1;
+                };
+
+                var bef = Date.now();
+                var search;
+                for (i = 0; i < totalsearches; i += 1) {
+                    search = searches[i];
+                    tree.forEachInRectangle(search.x, search.y, search.w, search.h, countHits);
+                }
+                var delta = Date.now() - bef;
+                var message = [
+                    'Total search time: ' + delta,
+                    'Avg time per search: ' + delta / totalsearches,
+                    'Avg number of results per search: ' + (count / totalsearches),
+                    'Tree size: ' + tree.size()
+                ].join('<br/>');
+                document.getElementById('message').innerHTML = message;
+
+
+            };
+
+
+        });
+
+    </script>
+</div>
+
+
+</article>
+
+</div>
+
+
+</body>
+</html>
