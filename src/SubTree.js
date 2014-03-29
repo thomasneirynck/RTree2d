@@ -37,27 +37,28 @@ define([
     }
   }
 
+  function drawToContext(context, child) {
+    child.draw && child.draw(context);
+    return context;
+  }
+
   return type({}, Rectangle.prototype, SubTreeDebugMixin, {
+
 
     constructor: function(x, y, w, h, bf) {
 
-      //Initialize.
       this.leaf = false;
       this.size = 0;
       this.branchingFactor = bf;
       this.parent = null;
       this.depth = 0;
 
-      //The children are stored as a doubly linked list, with the head attached to the parent itself.
       this.__firstChild = null;
       this.__nextSibling = null;
       this.__previousSibling = null;
 
-      //Trees are searched depth first.
-      //In <code>_search()</code>, we use .__nextSearch to string together a linked list of nodes we still need to explore (aka. the "stack").
       this.__nextSearch = null;
 
-      //simulate multiple return values when doing method pickSeeds by storing the results here.
       this._seed1 = null;
       this._seed2 = null;
 
@@ -66,16 +67,19 @@ define([
     },
 
     draw: function(context2d) {
-
       context2d.lineWidth = this.depth + 1;
       context2d.strokeStyle = this.leaf ? 'rgba(255,0,0,1)' : 'rgba(0,0,0,1)';
       context2d.strokeRect(this.l, this.b, this.w, this.h);
+      this._foldChildren(drawToContext, context2d);
+    },
 
+    _foldChildren: function(fold, accum) {
       var child = this.__firstChild;
       while (child) {
-        child.draw(context2d);
+        accum = fold(accum, child);
         child = child.__nextSibling;
       }
+      return accum;
     },
 
     _callWhenInteracts: function(x, y, tx, ty, callback) {
@@ -88,7 +92,7 @@ define([
       }
     },
 
-    _addPossiblePathsToCallstack: function(x, y, tx, ty) {
+    _addPathsToSearchStack: function(x, y, tx, ty) {
       var child = this.__firstChild;
       while (child) {
         if (child.interacts(x, y, tx, ty)) {
@@ -99,21 +103,24 @@ define([
       }
     },
 
+    _nextOnSearchStack: function() {
+      var tmp = this.__nextSearch;
+      this.__nextSearch = null;//kill the dangling pointer
+      return tmp;
+    },
+
     _search: function(x, y, w, h, callback) {
 
       var tx = x + w;
       var ty = y + h;
-      var tmp;
       var searchNode = this;
       do {
         if (searchNode.leaf) {
           searchNode._callWhenInteracts(x, y, tx, ty, callback);
         } else {
-          searchNode._addPossiblePathsToCallstack(x, y, tx, ty);
+          searchNode._addPathsToSearchStack(x, y, tx, ty);
         }
-        tmp = searchNode.__nextSearch;
-        searchNode.__nextSearch = null;//kill the dangling pointer
-        searchNode = tmp;
+        searchNode = searchNode._nextOnSearchStack();
       } while (searchNode);
 
     },
@@ -264,26 +271,24 @@ define([
     },
     _remove: function(object, x, y, w, h, treebase) {
 
-      var tmp, entry;
-      var nodeToExplore = this;
+      var entry;
 
       var tx = x + w;
       var ty = y + h;
 
-      while (nodeToExplore) {
-        if (nodeToExplore.leaf) {
-          entry = nodeToExplore._findMatchingEntry(object);
+      var searchNode = this;
+      do {
+        if (searchNode.leaf) {
+          entry = searchNode._findMatchingEntry(object);
           if (entry) {
-            nodeToExplore._removeChild(entry, treebase);
+            searchNode._removeAndPropagate(entry, treebase);
             return true;
           }
         } else {
-          nodeToExplore._addPossiblePathsToCallstack(x, y, tx, ty);
+          searchNode._addPathsToSearchStack(x, y, tx, ty);
         }
-        tmp = nodeToExplore.__nextSearch;
-        nodeToExplore.__nextSearch = null;//kill dangling pointer
-        nodeToExplore = tmp;
-      }
+        searchNode = searchNode._nextOnSearchStack();
+      } while (searchNode);
 
       return false;
     },
@@ -304,18 +309,22 @@ define([
       node2.leaf = this.leaf;
     },
 
-    _removeChild: function(child, treebase) {
+    _removeNode: function(node) {
+      this._removeNodeFromLinkedList(node);
+      this.size -= 1;
+      node.parent = null;
+      node._fitBounds();
+    },
 
-      //travel up the tree once. adjust the bounds of the parent, and remove nodes if necessary.
+    _removeAndPropagate: function(child, treebase) {
+
       var node = this;
       do {
         if (child) {
-          node._removeNodeFromLinkedList(child);
-          node.size -= 1;
-          child.parent = null;
+          node._removeNode(child);
+        } else {
+          node._fitBounds();
         }
-        node._fitBounds();
-
         child = (node.size === 0) ? node : null;
         node = node.parent;
       } while (node);

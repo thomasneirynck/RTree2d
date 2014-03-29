@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test rtree</title>
+    <script src="../lib/require.js"></script>
+</head>
+
+<body>
+
+<canvas id='test' style="border: 1px solid black" width=640 height=420></canvas>
+
+
+<script type="text/javascript">
+
+    require(['../src/RTree'], function (RTree) {
+
+        context = document.getElementById('test').getContext('2d');
+
+        function genRandom(from, to) {
+            var l = to - from;
+            return function () {
+                return (Math.random() * l) - from;
+            };
+        }
+
+        sw = 4;
+        var anchorX = genRandom(10, context.canvas.width - sw - 10);
+        var anchorY = genRandom(10, context.canvas.height - sw - 10);
+        var size = genRandom(0, sw);
+
+        function randomOb() {
+            var a = {};
+            a.l = anchorX();
+            a.b = anchorY();
+            a.r = a.l + size();
+            a.t = a.b + size();
+            return a;
+        }
+
+        function randomSearchOb() {
+            var a = {};
+            a.l = anchorX();
+            a.b = anchorY();
+            var size = genRandom(0, 30);
+            a.r = a.l + size();
+            a.t = a.b + size();
+            return a;
+        }
+
+        function draw(tree) {
+            context.canvas.width = context.canvas.width;
+            tree.draw(context);
+        }
+
+        rt = new RTree({
+            bf: 16
+        });
+
+        obs = [];
+        addRandom = function () {
+            ob = randomOb();
+            obs.push(ob);
+            rt.add(ob);
+            draw(rt);
+        };
+
+        addMany = function () {
+            var total = 100000;
+            obs = [];
+            for (var i = 0; i < total; i += 1) {
+                ob = randomOb();
+                obs.push([ob, rt._mapToEnvelope(ob)]);
+            }
+            var bef = Date.now();
+            for (var i = 0; i < total; i += 1) {
+                rt.insert(obs[i][0], obs[i][1]);
+            }
+            console.log('aft', Date.now() - bef);
+
+            draw(rt);
+        };
+
+        var refs = [
+            {"l": 466, "b": 220, "r": 504, "t": 257},
+            {"l": 281, "b": 167, "r": 308, "t": 201},
+            {"l": 128, "b": 92, "r": 129, "t": 108},
+            {"l": -9, "b": 213, "r": 3, "t": 230},
+            {"l": 294, "b": 270, "r": 315, "t": 278},
+            {"l": 498, "b": -8, "r": 508, "t": 32},
+            {"l": 433, "b": 115, "r": 473, "t": 144},
+            {"l": 421, "b": 59, "r": 455, "t": 77},
+            {"l": 514, "b": 233, "r": 554, "t": 247},
+            {"l": 479, "b": 96, "r": 502, "t": 111},
+            {"l": 75, "b": 236, "r": 105, "t": 237},
+            {"l": 527, "b": 44, "r": 529, "t": 81},
+            {"l": 249, "b": 287, "r": 267, "t": 323},
+            {"l": 135, "b": 168, "r": 169, "t": 198},
+            {"l": 405, "b": 317, "r": 406, "t": 335},
+            {"l": 261, "b": 85, "r": 297, "t": 95},
+            {"l": 352, "b": 256, "r": 360, "t": 261},
+            {"l": 214, "b": 158, "r": 230, "t": 166},
+            {"l": 76, "b": 33, "r": 109, "t": 49},
+            {"l": 498, "b": 81, "r": 526, "t": 91},
+            {"l": 111, "b": 346, "r": 130, "t": 383},
+            {"l": 228, "b": 37, "r": 259, "t": 51}
+        ];
+        addFromList = function () {
+            ref = refs.shift();
+            if (refs.length === 0) {
+//                debugger;
+            }
+            rt.add(ref);
+            draw(rt);
+        };
+
+        addAll = function () {
+            while (refs.length > 0) {
+                addFromList();
+            }
+        };
+
+        search = function () {
+            ob = randomSearchOb();
+            env = rt._mapToEnvelope(ob);
+
+            var b = Date.now();
+            res = rt.search(env);
+            console.log('time:', Date.now() - b, " length: ", res.length);
+
+            window.drawDebug({envelope: env});
+
+            console.log(res);
+        };
+
+        totalsearches = 10000;
+        searches = [];
+        for (i = 0; i < totalsearches; i += 1) {
+            searches[i] = randomSearchOb();
+        }
+        searchMany = function () {
+            var bef = Date.now();
+            for (i = 0; i < totalsearches; i += 1) {
+                res = rt.search(searches[i]);
+            }
+            time = Date.now() - bef
+            console.log('total search time: ', time, 'searches', totalsearches, 'avg time', time / totalsearches);
+        }
+
+
+        var se = rt.searchEngine();
+        var collected = [];
+        var count = 0;
+        cb = function (it) {
+            collected[count] = it;
+            count += 1;
+        };
+
+        searchManyWithEngine = function () {
+            var bef = Date.now();
+            for (i = 0; i < totalsearches; i += 1) {
+                se.setSearchEnvelope(searches[i]);
+                count = 0;
+                se.reduce(cb, collected);
+            }
+            time = Date.now() - bef;
+            console.log('total search time: ', time, 'searches', totalsearches, 'avg time', time / totalsearches);
+        }
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

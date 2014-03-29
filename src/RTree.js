@@ -1,8 +1,8 @@
-define(['./SubTree'], function(SubTree) {
+define(['./SubTree', './type'], function(SubTree, type) {
 
   "use strict";
 
-  function accumulateInArray(acc, ob) {
+  function accumulate(acc, ob) {
     acc.push(ob);
     return acc;
   }
@@ -16,19 +16,16 @@ define(['./SubTree'], function(SubTree) {
    * @constructor
    * @name RTree
    */
-  function RTree(configuration) {
-
-    configuration = configuration || {};
-    this._branchingFactor = (configuration.branchingFactor >= 3) ? configuration.branchingFactor : 16;
-    this._root = null;
-    this._size = 0;
-
-  }
 
 
-  RTree.prototype = {
+  return type({
 
-    constructor: RTree,
+    constructor: function(configuration) {
+      configuration = configuration || {};
+      this._branchingFactor = (configuration.branchingFactor >= 3) ? configuration.branchingFactor : 16;
+      this._root = null;
+      this._size = 0;
+    },
 
     _growTree: function(node1, node2) {
       var newRoot = new SubTree(node1.l, node1.b, node1.w, node1.h, this._branchingFactor);
@@ -145,7 +142,7 @@ define(['./SubTree'], function(SubTree) {
      * @param {Number} h the height of the rectangle* @returns {Array} objects interaction with the search rectang
      */
     search: function(x, y, w, h) {
-      return this.reduceInRectangle(x, y, w, h, accumulateInArray, []);
+      return this.reduceInRectangle(x, y, w, h, accumulate, []);
     },
 
     /**
@@ -191,8 +188,6 @@ define(['./SubTree'], function(SubTree) {
     }
 
 
-  };
-
-  return RTree;
+  });
 
 });

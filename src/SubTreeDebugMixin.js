@@ -3,52 +3,62 @@ define([
 ], function(Rectangle) {
 
 
+  function pushChild(ar, child) {
+    ar.push(child);
+    return ar;
+  }
+
+  function expand(acc, child) {
+    var r = acc.r;
+    var parent = acc.parent;
+    r.include(child.l, child.b, child.r, child.t);
+    if (!parent.contains(child.l, child.b, child.r, child.t)) {
+      console.error('parent', r.toString(), 'child', child.toString());
+      throw 'parent doesnt contain';
+    }
+    return acc;
+
+
+  }
+
   return {
 
-    __children: function() {
-      var ch = [];
-      var child = this.__firstChild;
-      while (child) {
-        ch.push(child);
-        child = child.__nextSibling;
-      }
-      return ch;
+    __getChildren: function() {
+      return this._foldChildren(pushChild, []);
     },
 
     __checkCount: function() {
-      var child = this.__firstChild;
-      var c = 0;
-      while (child) {
-        c += 1;
-        child = child.__nextSibling;
-      }
-      if (c !== this.size) {
-        throw 'count is not correct';
+
+      if (this.__getChildren().length !== this.size) {
+        console.log('counts', this, " children-count + " + this.__getChildren().length + " vs size = " + this.size);
+        throw 'child count vs size is not correct';
       }
 
       if (this.size > this.branchingFactor) {
-        throw 'childs exceed branching facor';
+        console.error('size is not correct', this, " brancing factor = " + this.branchingFactor + " vs size = " + this.size);
+        throw 'size exceeds branching factor';
       }
     },
 
     __checkChildrendLinkedList: function() {
+
       var child = this.__firstChild;
       if (child && child.__previousSibling !== null) {
-        console.log('first child should not have backref', child);
+        console.error('first child should not have backref', this, child);
         throw 'First child should not have a backreference';
       }
 
-      while (child) {
+      this.__getChildren().forEach(function(child) {
         if (child.__nextSibling && child !== child.__nextSibling.__previousSibling) {
-          console.log('next back reference is not correct');
+          console.error('next back reference is not correct', child, child.__nextSibling);
           throw 'next back reference is not correct';
         }
         if (child.__previousSibling && child.__previousSibling.__nextSibling !== child) {
-          console.log('previous forward reference is not correct');
+          console.error('next back reference is not correct', child, child.__previousSibling);
           throw 'prev back reference is not correct';
         }
-        child = child.__nextSibling;
-      }
+      });
+
     },
 
     __checkBB: function() {
@@ -56,30 +66,25 @@ define([
       var r = new Rectangle(this.l, this.b, this.w, this.h);
       r.reset();
 
-      var child = this.__firstChild;
-      while (child) {
-        r.include(child.l, child.b, child.r, child.t);
-//        if (!this.contains(child.l, child.b, child.r, child.t)) {
-//          console.log('parent', this.toString(), 'child', child.toString());
-//          throw 'parent doesnt contain';
-//        }
-        child = child.__nextSibling;
-      }
+
+      this._foldChildren(expand, {
+        r: r,
+        parent: this
+      });
+
+
       if (!r.equals(this.l, this.b, this.r, this.t)) {
-        console.log(r.toString(), this.toString());
-        ch = this.__children();
-        pa = this;
-        ra = r;
+        console.error(this, this.__getChildren(), r.toString(), this.toString());
         throw 'doesnt fit snug';
       }
+
+
     },
 
-    __checkChildren: function() {
-      var child = this.__firstChild;
-      while (child) {
-        child.__validate && child.__validate();
-        child = child.__nextSibling
-      }
+    __validateChildren: function() {
+      this.__getChildren().forEach(function(chlid) {
+        chlid.__validate() && chlid.__validate();
+      });
     },
 
     __validate: function() {
@@ -88,7 +93,7 @@ define([
       this.__checkChildrendLinkedList();
       this.__checkBB();
 
-      this.__checkChildren();
+      this.__validateChildren();
 
     }
 

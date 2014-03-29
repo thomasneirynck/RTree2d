@@ -13,7 +13,7 @@ define(['./type'], function(type) {
     },
 
     toString: function() {
-      return '[' + [this.l, this.b, this.w, this.h].join(',') + ']';
+      return '[' + [this.l, this.b, this.r, this.t, this.w, this.h].join(',') + ']';
     },
     equals: function(l, b, r, t) {
       return (r === this.r && t === this.t && l === this.l && b === this.b);

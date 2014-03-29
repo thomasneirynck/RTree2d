@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>rtree tests</title>
+
+    <script src="../bower_components/requirejs/require.js"></script>
+    <script src="../bower_components/qunit/qunit/qunit.js"></script>
+    <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css"/>
+
+
+    <style type='text/css'>
+
+        html, body {
+            margin: 0 auto;
+            height: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div id="qunit"></div>
+
+<script>
+
+    requirejs.config({
+        baseUrl: '..',
+        paths: {
+            test: 'test',
+            rtree: 'src'
+
+        }
+    });
+    QUnit.config.autostart = false;
+
+    require([
+        'test/RTree-test'
+    ], function() {
+        QUnit.start(); //Tests loaded, run tests
+    });
+
+
+</script>
+</body>
+</html>
