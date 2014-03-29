@@ -18,20 +18,25 @@ define([], function() {
 
   return function(prototype) {
 
-    var mixins = (arguments.length > 1) ? [Object.create(prototype)].concat(Array.prototype.slice.call(arguments, 1)) :
-                 [
-                   {},
-                   prototype
-                 ];
-    var proto = mixin(mixins);
+    var mixins, proto;
+    try {
+      mixins = (arguments.length > 1) ? [Object.create(prototype)].concat(Array.prototype.slice.call(arguments, 1)) :
+               [
+                 {},
+                 prototype
+               ];
+      proto = mixin.apply(null, mixins);
 
-    //ensure 2-way binding (so an object's constructor and that constructor's prototype match)
-    proto.constructor.prototype = proto;
+      //ensure 2-way binding (so an object's constructor and that constructor's prototype match)
+      proto.constructor.prototype = proto;
 
-    //lock down prototypes
-    Object.freeze(proto);
-    Object.freeze(proto.constructor);
-
+      //lock down prototypes
+      Object.freeze(proto);
+      Object.freeze(proto.constructor);
+    } catch (e) {
+      console.error("type: Cannot make constructor function and prototype with ", arguments);
+      throw e;
+    }
     return proto.constructor;
 
   }

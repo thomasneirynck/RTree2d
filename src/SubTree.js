@@ -4,7 +4,6 @@ define([
   './type'
 ], function(Rectangle, SubTreeDebugMixin, type) {
 
-
   var Entry = type({}, Rectangle.prototype, {
     constructor: function(object, x, y, w, h) {
       this.__nextSibling = null;
@@ -137,6 +136,9 @@ define([
         }
         child = child.__nextSibling;
       }
+      if (!bestNode) {
+        throw 'somthing is rotten. should have children';
+      }
       return bestNode;
     },
 
@@ -202,7 +204,6 @@ define([
       this._removeNodeFromLinkedList(this._seed1);
       this._removeNodeFromLinkedList(this._seed2);
 
-
       var firstUnassigned = this.__firstChild;//keep track of the head.
       this.__firstChild = null;
       this._addChild(this._seed1);
@@ -234,19 +235,17 @@ define([
         child = child.__nextSibling;
       }
 
-      var wdiff = Math.abs(rightmost.l - leftmost.r);
-      var hdiff = Math.abs((topmost.b - bottommost.t) * this.w / this.h);
       var a, b, c, d;
-      if (wdiff > hdiff) {
+      if (Math.abs(rightmost.l - leftmost.r) > Math.abs((topmost.b - bottommost.t) * this.w / this.h)) {
         a = leftmost;
         b = rightmost;
         c = bottommost;
         d = topmost;
       } else {
-        c = leftmost;
-        d = rightmost;
         a = bottommost;
         b = topmost;
+        c = leftmost;
+        d = rightmost;
       }
       if (a !== b) {
         this._seed1 = a;
@@ -303,17 +302,18 @@ define([
     },
 
     clone: function() {
-      var node2 = new this.constructor(this.l, this.b, this.w, this.h, this.branchingFactor);
-      node2.parent = this.parent;
-      node2.depth = this.depth;
-      node2.leaf = this.leaf;
+      var clone = new this.constructor(this.l, this.b, this.w, this.h, this.branchingFactor);
+      clone.parent = this.parent;
+      clone.depth = this.depth;
+      clone.leaf = this.leaf;
+      return clone;
     },
 
     _removeNode: function(node) {
       this._removeNodeFromLinkedList(node);
       this.size -= 1;
       node.parent = null;
-      node._fitBounds();
+      this._fitBounds();
     },
 
     _removeAndPropagate: function(child, treebase) {

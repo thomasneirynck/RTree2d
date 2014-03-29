@@ -170,11 +170,11 @@ define(['./SubTree', './type'], function(SubTree, type) {
     /**
      * Remove the object from the RTree
      *
-     * @param {Object} object
-     * @param {Number} x
-     * @param {Number} y
-     * @param {Number} w
-     * @param {Number} h
+     * @param {Object} object the object to remove
+     * @param {Number} x corresponding x of the object
+     * @param {Number} y corresponding y of the object
+     * @param {Number} w corresponding w of the object
+     * @param {Number} h corresponding h of the object
      *
      * @memberOf RTree#
      * @function

@@ -135,12 +135,12 @@ define([
 
     var size = rt.size();
     ob = obs[0];
-    var r = rt.removeObject(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
+    var r = rt.remove(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     equal(rt.size(), size - 1, 'should have removed one');
 //    rt._root.__validate();
 
     //try remove the same
-    var r = rt.removeObject(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
+    var r = rt.remove(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     equal(rt.size(), size - 1, 'should not have removed anything');
 
 
