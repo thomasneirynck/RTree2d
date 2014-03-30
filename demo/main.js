@@ -7,19 +7,20 @@ define([
   var draw = document.getElementById('draw');
   draw.onclick = show;
 
+  var rtree;
+
   function show() {
-    if (draw.checked && tree.size() > 0) {
+    context2d.clearRect(0, 0, context2d.canvas.width, context2d.canvas.height);
+    if (draw.checked && rtree.size() > 0) {
       context2d.canvas.style.visibility = 'visible';
       context2d.clearRect(0, 0, context2d.canvas.width, context2d.canvas.height);
-      tree.draw(context2d);
-    } else {
-      context2d.canvas.style.visibility = 'hidden';
+      rtree.draw(context2d);
     }
   }
 
 
   function reset() {
-    tree = new RTree();
+    rtree = new RTree();
     context2d.canvas.width = document.getElementById('page').offsetWidth;
     show();
   }
@@ -67,73 +68,34 @@ define([
     var start = new Date().getTime();
     for (i = 0; i < total; i += 1) {
       ob = obs[i];
-      tree.insert(ob, ob.x, ob.y, ob.w, ob.h);
+      rtree.insert(ob, ob.x, ob.y, ob.w, ob.h);
     }
     var delta = (new Date().getTime()) - start;
 
     var message = ["Total time: " + (delta) + "ms",
       " Avg time per insert: " + delta / obs.length + "ms",
       "Total # insertions: " + obs.length,
-      "Tree size: " + tree.size()].join('<br/>');
+      "Tree size: " + rtree.size()].join('<br/>');
     document.getElementById("message").innerHTML = message;
 
     show();
     window.show = show;
 
   });
-//
-//
-//  var search = document.getElementById('search');
-//  search.onclick = function() {
-//
-//
-//    var total = nr.options[nr.selectedIndex].value;
-//    var boxdim = 100;
-//    var anchorX = genRandom(10, context2d.canvas.width - boxdim - 10);
-//    var anchorY = genRandom(10, context2d.canvas.height - boxdim - 10);
-//    var size = genRandom(0, boxdim);
-//
-//    function randomSearchOb() {
-//      var a = {};
-//      a.x = anchorX();
-//      a.y = anchorY();
-//      var size = genRandom(0, 30);
-//      a.w = size();
-//      a.h = size();
-//      return a;
-//    }
-//
-//    //create some search objes
-//    var totalsearches = 10000;
-//    var searches = [];
-//    var i;
-//    for (i = 0; i < totalsearches; i += 1) {
-//      searches[i] = randomSearchOb();
-//    }
-//
-//
-//    var count = 0;
-//    var countHits = function(it) {
-//      count += 1;
-//    };
-//
-//    var bef = Date.now();
-//    var search;
-//    for (i = 0; i < totalsearches; i += 1) {
-//      search = searches[i];
-//      tree.forEachInRectangle(search.x, search.y, search.w, search.h, countHits);
-//    }
-//    var delta = Date.now() - bef;
-//    var message = [
-//      'Total search time: ' + delta,
-//      'Avg time per search: ' + delta / totalsearches,
-//      'Avg number of results per search: ' + (count / totalsearches),
-//      'Tree size: ' + tree.size()
-//    ].join('<br/>');
-//    document.getElementById('message').innerHTML = message;
-//
-//
-//  };
+
+
+  var searchMessage = jquery('#search');
+  jquery(context2d.canvas).mousemove(function(event) {
+
+    var parentOffset = jquery(this).parent().offset();
+    var relX = event.pageX - parentOffset.left;
+    var relY = event.pageY - parentOffset.top;
+
+    var results = rtree.search(relX - 1, relY - 1, 2, 2);
+
+    jquery(searchMessage).text(results.length + " results under the mouse pointer");
+
+  });
 
 
 });
