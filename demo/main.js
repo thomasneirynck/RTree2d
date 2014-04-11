@@ -98,7 +98,6 @@ define([
 
     jquery(searchMessage).text(results.length + " results under the mouse pointer and " + " showing " + knn.length + " nearest neighbours");
 
-
     context2dOverlay.clearRect(0, 0, context2dOverlay.canvas.width, context2dOverlay.canvas.height);
 
     context2dOverlay.lineWidth = 1;

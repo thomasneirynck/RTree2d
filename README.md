@@ -15,7 +15,6 @@ todo
 
 todo
 
-
 ## Demo
 
 Take a test drive [here](http://neirynck.us/rtree).
@@ -58,6 +57,9 @@ Take a test drive [here](http://neirynck.us/rtree).
 
     });
 
+### Code repository
+
+[Git repo on bitbucket](https://bitbucket.org/trgn/rtree2d)
 
 ##Dev project setup
 
