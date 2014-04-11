@@ -28,7 +28,7 @@ Take a test drive [here](http://neirynck.us/rtree).
 
     define(['package/RTree2d'], function(RTree2d){
 
-        rtree = new RTree2d();
+        var rtree = new RTree2d();
 
         //insert an object at the rectangle (x/y/width/height).
         var ob = {store: 'me'};
@@ -45,11 +45,16 @@ Take a test drive [here](http://neirynck.us/rtree).
             console.log("i got a hit,",ob);
         });
 
+        //find the k nearest neighbours (x/y/k)
+        var kNNArray = rtree.nearestNeighbours(0,0,1);
+
         //Number of elements in the tree.
         var size = rtree.size();
 
         //Remove an element.
         var newSizeOfTree = domainOb.remove(ob,2,3,4,5);
+
+
 
     });
 

@@ -1,13 +1,21 @@
 define([
   './Rectangle',
   './SubTreeDebugMixin',
-  './type'
-], function(Rectangle, SubTreeDebugMixin, type) {
+  './type',
+  './PriorityQueue'
+], function(Rectangle, SubTreeDebugMixin, type, PriorityQueue) {
+
+  var PRIORITY_QUEUE = new PriorityQueue(function(node1, node2) {
+    return node1.__dist - node2.__dist;
+  });
+
 
   var Entry = type({}, Rectangle.prototype, {
+    isEntry: true,
     constructor: function(object, x, y, w, h) {
-      this.__nextSibling = null;
       this.object = object;
+      this.__nextSibling = null;
+      this.__dist = 0;
       Rectangle.call(this, x, y, w, h);
     },
     draw: function(context) {
@@ -40,8 +48,7 @@ define([
   }
 
   return type({}, Rectangle.prototype, SubTreeDebugMixin, {
-
-
+    isEntry: false,
     constructor: function(x, y, w, h, bf) {
 
       this.leaf = false;
@@ -49,6 +56,8 @@ define([
       this.branchingFactor = bf;
       this.parent = null;
       this.depth = 0;
+
+      this.__dist = 0;
 
       this.__firstChild = null;
       this.__nextSibling = null;
@@ -104,6 +113,31 @@ define([
       var tmp = this.__nextSearch;
       this.__nextSearch = null;//kill the dangling pointer
       return tmp;
+    },
+
+    _addToQueue: function(x, y) {
+      var child = this.__firstChild;
+      while (child) {
+        child.__dist = child.squaredDistanceTo(x, y);
+        PRIORITY_QUEUE.enqueue(child);
+        child = child.__nextSibling;
+      }
+    },
+
+    _knn: function(x, y, k, callback) {
+
+      PRIORITY_QUEUE.clear();
+      var node = this;
+      do {
+        if (node.isEntry) {
+          k -= 1;
+          callback(node.object);
+        } else {
+          node._addToQueue(x, y);
+        }
+        node = PRIORITY_QUEUE.dequeue();
+      } while (k && node)
+
     },
 
     _search: function(x, y, w, h, callback) {

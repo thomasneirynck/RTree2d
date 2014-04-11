@@ -1,5 +1,13 @@
 define(['./type'], function(type) {
 
+
+  function clamp(v, from, to) {
+    v = Math.max(from, v);
+    v = Math.min(v, to);
+    return v;
+  }
+
+
   return type({
 
     constructor: function(x, y, w, h) {
@@ -60,6 +68,12 @@ define(['./type'], function(type) {
 
     interacts: function(l, b, r, t) {
       return (this.l <= r && this.r >= l && this.b <= t && this.t >= b);
+    },
+
+    squaredDistanceTo: function(x, y) {
+      var tx = clamp(x, this.l, this.r);
+      var ty = clamp(y, this.b, this.t);
+      return Math.pow(tx - x, 2) + Math.pow(ty - y, 2);
     }
   });
 

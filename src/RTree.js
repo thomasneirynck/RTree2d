@@ -27,6 +27,24 @@ define(['./SubTree', './type'], function(SubTree, type) {
       this._size = 0;
     },
 
+    nearestNeighbours: (function() {
+      var results;
+
+      function collect(e) {
+        results.push(e);
+      }
+
+      return function(x, y, k) {
+        k = k || 1;
+        results = [];
+        if (this._root) {
+          this._root._knn(x, y, k, collect);
+        }
+        return results;
+      };
+    }()),
+
+
     _growTree: function(node1, node2) {
       var newRoot = new SubTree(node1.l, node1.b, node1.w, node1.h, this._branchingFactor);
       newRoot._addChild(node1);

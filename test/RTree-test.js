@@ -1,6 +1,7 @@
 define([
-  'rtree/RTree'
-], function(RTree) {
+  'rtree/RTree',
+  'rtree/Rectangle'
+], function(RTree, Rectangle) {
 
   module("RTree");
 
@@ -38,6 +39,37 @@ define([
     return ob;
   }
 
+  test("rectangle", function() {
+
+    var r = new Rectangle(1, 1, 2, 2);
+
+    var res = r.squaredDistanceTo(0, 0);
+    equal(2, res);
+
+    res = r.squaredDistanceTo(12, 1.5);
+    equal(81, res);
+
+  });
+
+  test("k-nn (small)", function() {
+
+    var rt = new RTree();
+
+    var ob1 = "one";
+    var ob2 = "two";
+    rt.insert(ob1, 1, 1, 10, 10);
+    rt.insert(ob2, 100, 100, 10, 10);
+
+    var results = rt.nearestNeighbours(0, 0, 1);
+    equal(results[0], ob1);
+
+    results = rt.nearestNeighbours(102, 1000, 1);
+    equal(results[0], ob2);
+
+    results = rt.nearestNeighbours(102, 1000, 10);
+    equal(results.length, 2, "should only have 2 (since no more objects in the tree)");
+
+  });
 
 
   test("insert", function() {
@@ -109,6 +141,33 @@ define([
       rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
     }
     equal(rt.size(), OBS.length, "should keep track of size (" + OBS.length + ")");
+
+
+  });
+
+  test("insert - knn - determinate", function() {
+
+    var rt = new RTree({
+      bf: 3
+    });
+
+
+    var b = Date.now();
+    var ob;
+    for (var i = 0; i < OBS.length; i += 1) {
+      ob = OBS[i];
+      rt.insert(ob, ob.l, ob.b, ob.r - ob.l, ob.t - ob.b);
+    }
+
+    tree = rt;
+
+    results = tree.nearestNeighbours(0, 0, 10);
+
+    equal(results.length, 10, "should get the 10 closest");
+    equal(results[0].l, 20);
+    equal(results[0].b, 161);
+    equal(results[0].r, 26);
+    equal(results[0].t, 161);
 
 
   });
