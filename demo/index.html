@@ -82,10 +82,14 @@
                 <div id="search"></div>
             </div>
 
-            <div>
-                <p>
-                    <canvas width="0px" height="400px" style="border: 1px solid black" id="canv"></canvas>
-                </p>
+
+            <div id="map" style="position:relative; border: 1px solid black; width: auto; height: auto">
+                <canvas width="0px" height="400px"
+                        style="position: absolute; left: 0; right: 0; z-index: 1"
+                        id="canvOverlay"></canvas>
+                <canvas width="0px" height="400px"
+                        style="position: absolute; left: 0; right: 0;z-index: 0"
+                        id="canv"></canvas>
             </div>
 
 
