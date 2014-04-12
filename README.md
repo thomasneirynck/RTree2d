@@ -1,7 +1,7 @@
 RTree2d
 -------
 
-A fast and memory-efficient 2D RTree implementation for Javascript.
+A fast and memory-efficient 2D RTree implementation for Javascript. Supports range searches and neirest neighbour searches.
 
 ## Installation
 
@@ -83,12 +83,11 @@ Take a test drive [here](http://neirynck.us/rtree).
 
     > git clone https://bitbucket.org/trgn/rtree2d.git
 
-2) run node setup script
+2) run node setup script (might need admin priviliges on windows)
 
     > node setup.js
 
 3) build a release
 
-    > cd build
-    > "../node_modules/.bin/jake" -f build.js release
+    > "./node_modules/.bin/jake" -f build.js release
 

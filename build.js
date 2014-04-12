@@ -1,3 +1,9 @@
+/**
+ * release script with jake tasks.
+ *
+ * run from project root!
+ */
+
 var sys = require('sys');
 var exec = require('child_process').exec;
 var fs = require('fs');
@@ -8,13 +14,14 @@ var rimraf = require('rimraf');
 var buildify = require('buildify');
 
 
-var RELEASE_DIR = '../release/';
+//execute from root.
+var RELEASE_DIR = './release/';
 var NODE_DIR = RELEASE_DIR + 'node/';
 
 var addGoogleAnalytics = function(content) {
   var nb = buildify();
   var ga = nb
-    .load('./parts/googleAnalytics.frag')
+    .load('./build/parts/googleAnalytics.frag')
     .content;
   return content.replace('</head>', ga + "</head>");
 };
@@ -22,7 +29,7 @@ var addGoogleAnalytics = function(content) {
 var addLicense = function(content) {
   var nb = buildify();
   var lic = nb
-    .load('./parts/mitlicense.frag')
+    .load('./build/parts/mitlicense.frag')
     .content;
 
   return lic + content;
@@ -47,13 +54,13 @@ task('setup', function() {
 desc('build node package');
 task('nodeModule', ['setup'], function() {
 
-  nodefy.batchConvert('../src/*.js', NODE_DIR, function(err, results) {
+  nodefy.batchConvert('./src/*.js', NODE_DIR, function(err, results) {
     if (err) {
       console.log('node failed.', err);
       return;
     }
-    copy('./node-package.json', NODE_DIR + 'package.json');
-    copy('../README.md', NODE_DIR + 'README.md');
+    copy('./build/node-package.json', NODE_DIR + 'package.json');
+    copy('./README.md', NODE_DIR + 'README.md');
     complete();
   });
 
@@ -64,7 +71,7 @@ desc('build jsdoc');
 task('jsdoc', ['setup'], function() {
 
   //build jsdoc
-  exec('"../node_modules/.bin/jsdoc" ../src/ ../README.md -d ../release/jsdoc -t "./jsdoctemplate"', function(err, stdout, sterr) {
+  exec('"./node_modules/.bin/jsdoc" ./src/ ./README.md -d ./release/jsdoc -t "./build/jsdoctemplate"', function(err, stdout, sterr) {
 
     if (err || sterr) {
       console.log('jsdoc failed.', err, sterr);
@@ -72,9 +79,9 @@ task('jsdoc', ['setup'], function() {
 
     var b = buildify();
     b
-      .load('../release/jsdoc/index.html')
+      .load('./release/jsdoc/index.html')
       .perform(addGoogleAnalytics)
-      .save('../release/jsdoc/index.html');
+      .save('./release/jsdoc/index.html');
 
     complete();
 
@@ -86,7 +93,7 @@ desc('build demo');
 task('demo', ['setup'], function() {
 
 
-  exec('node ../node_modules/requirejs/bin/r.js -o amd-profile-demo.js', function(err, stdout, sterr) {
+  exec('node ./node_modules/requirejs/bin/r.js -o build/amd-profile-demo.js', function(err, stdout, sterr) {
 
     if (err || sterr) {
       console.error('demo minification failed.', err);
@@ -95,31 +102,31 @@ task('demo', ['setup'], function() {
 
     var b = buildify();
     b
-      .load("../release/index.html")
+      .load("./release/index.html")
       .perform(function(content) {
-        content = content.replace(/.*<!--amdloader-->(.*?)\<!--amdloader-->/g, '<script type="text/javascript" src="./require.js"></script>');
-        content = content.replace(/.*<!--bootstrap-->(.*?)\<!--bootstrap-->/g, '<script type="text/javascript" src="./main.js"></script>');
+        content = content.replace(/.*<!--amdloader-->([\s\S]*?)\<!--amdloader-->/g, '<script type="text/javascript" src="./require.js"></script>');
+        content = content.replace(/.*<!--bootstrap-->([\s\S]*?)\<!--bootstrap-->/g, '<script type="text/javascript" src="./main.js"></script>');
         return content;
       })
-      .save("../release/index.html");
+      .save("./release/index.html");
 
         //add ga
     b = buildify();
     b
-      .load("../release/index.html")
+      .load("./release/index.html")
       .perform(addGoogleAnalytics)
-      .save("../release/index.html");
+      .save("./release/index.html");
 
     b = buildify();
     b
-      .load("../release/main.js")
+      .load("./release/main.js")
       .perform(addLicense)
-      .save("../release/main.js");
+      .save("./release/main.js");
 
     b = buildify();
     b
-      .load("../bower_components/requirejs/require.js")
-      .save("../release/require.js");
+      .load("./bower_components/requirejs/require.js")
+      .save("./release/require.js");
 
     complete();
 
