@@ -1,5 +1,5 @@
 {
-    "name": "rtree2d",
+    "name": "rtree-2d",
     "version": "0.0.0",
     "description": "RTree module for Javascript. Supports range searches and nearest neighbour searches.",
     "main": "RTree.js",

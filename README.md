@@ -32,7 +32,7 @@ Your path config would look something like...
 
 Use the node package manager to install the module
 
-    > npm install rtree2d
+    > npm install rtree-2d
 
 ## Demo
 
