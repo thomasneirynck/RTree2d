@@ -1,6 +1,6 @@
 {
-    "name": "rtree-2d",
-    "version": "0.0.0",
+    "name": "rtree2d",
+    "version": "0.0.4",
     "description": "RTree module for Javascript. Supports range searches and nearest neighbour searches.",
     "main": "RTree.js",
     "repository": {
