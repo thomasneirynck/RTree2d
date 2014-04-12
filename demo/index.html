@@ -4,9 +4,13 @@
     <title>Javascript RTree (AMD module)</title>
     <link rel="stylesheet" type="text/css" href="./default.css">
 
-    <!--amdloader--><script type="text/javascript" src="../bower_components/requirejs/require.js"></script><!--amdloader-->
+    <!--amdloader-->
+    <script type="text/javascript" src="../bower_components/requirejs/require.js"></script>
+    <!--amdloader-->
 
-    <!--bootstrap--><script type="text/javascript" src="./run.js"></script><!--bootstrap-->
+    <!--bootstrap-->
+    <script type="text/javascript" src="./run.js"></script>
+    <!--bootstrap-->
 
 
 </head>
@@ -16,40 +20,11 @@
 
     <h1>Javascript RTree</h1>
 
-    <p>
-        A fast and memory-efficient RTree implementation for Javascript.
-        It can be loaded with any AMD-loader (e.g. <a href="http://requirejs.org">requirejs</a>) , in the browser or
-        in
-        node.
-    </p>
-
-    <h2>Download</h2>
+    <h2>Documentation and source code</h2>
 
     <p>
-        todo
-    </p>
-
-    <h2>Features</h2>
-
-    <ol>
-        <li>It is <strong>fast</strong>: search and insertion are very fast.
-            It performs up to 50000-100000 insertions per second on modern browsers.
-        </li>
-        <li>It is <strong>memory-efficient</strong>: since RTree's are often used as a low level component in
-            visualization
-            software, you do not want it to spam memory for the garbage collector to clean up. This implementation
-            has
-            a very conservative memory usage profile.
-        </li>
-        <li>Simple API. Add, insert and remove objects using simple number values.</li>
-    </ol>
-
-
-    <h2>Documentation</h2>
-
-    <p>
-        <span><a href="./jsdoc">API Docs</a></span>
         <span><a href="https://bitbucket.org/trgn/rtree">Repository + readme</a></span>
+        <span><a href="./jsdoc">API Docs</a></span>
     </p>
 
     <h2>Try it!</h2>
@@ -76,8 +51,7 @@
                     <input type="button" value="insert 1000000 objects (danger! high voltage!)" data-nr='1000000'/>
                 </div>
                 <div>
-                    Show the current tree (not for the faint of heart): <input type="checkbox" id="draw"
-                                                                               value="draw"
+                    Show the current tree (not for the faint of heart): <input type="checkbox" id="draw" value="draw"
                                                                                checked="true"/>
                 </div>
                 <div id="message"></div>
