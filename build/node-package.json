@@ -1,0 +1,22 @@
+{
+    "name": "rtree2d",
+    "version": "0.0.2",
+    "description": "RTree module for Javascript. Supports range searches and nearest neighbour searches.",
+    "main": "RTree.js",
+    "repository": {
+        "type": "git",
+        "url": "https://bitbucket.org/trgn/rtree2d"
+    },
+    "keywords": [
+        "RTree",
+        "spatial",
+        "index",
+        "AMD",
+        "GIS",
+        "nearest neighbour",
+        "range search"
+    ],
+    "author": "Thomas Neirynck",
+    "license": "MIT",
+    "readmeFilename": "README.md"
+}

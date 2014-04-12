@@ -249,7 +249,9 @@ define([
     },
 
     /**
-     * ang tang linear split.
+     * ang tan linear split
+     *
+     * @private
      */
     pickSeeds: function() {
 

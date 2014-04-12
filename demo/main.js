@@ -1,5 +1,5 @@
-define([
-  /*modulepath*/"rtree2d/RTree"/*modulepath*/,
+require([
+  "rtree2d/RTree",
   "jquery"], function(RTree, jquery) {
 
   var context2dBase = document.getElementById('canv').getContext('2d');

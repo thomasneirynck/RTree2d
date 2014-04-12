@@ -5,15 +5,16 @@ A fast and memory-efficient 2D RTree implementation for Javascript.
 
 ## Installation
 
-The RTree is available as AMD package or node package.
+The RTree is available as an AMD package or a node package.
 
-### Node
-
-todo
 
 ### Bower / AMD
 
-todo
+
+
+### Node
+
+doc todo
 
 ## Demo
 
@@ -37,7 +38,6 @@ Take a test drive [here](http://neirynck.us/rtree).
         var results = rtree.search(0,0,10,10);
         //results ~= [{store: "me"}];
 
-
         //Instead of using search, you can also use one of the collection comprehension methods.
         //(e.g. you might be doing a search 60 frames-per-second. You do not want a new array each time).
         rtree.forEachinRectangle(0,0,10,10, function(ob){
@@ -53,8 +53,6 @@ Take a test drive [here](http://neirynck.us/rtree).
         //Remove an element.
         var newSizeOfTree = domainOb.remove(ob,2,3,4,5);
 
-
-
     });
 
 ### Code repository
@@ -63,4 +61,15 @@ Take a test drive [here](http://neirynck.us/rtree).
 
 ##Dev project setup
 
-todo
+1) checkout repo
+
+    > git clone https://bitbucket.org/trgn/rtree2d.git
+
+2) run node setup script
+
+    > node setup.js
+
+3) (to build releases)
+
+    > cd build
+    >

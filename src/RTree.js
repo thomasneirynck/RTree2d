@@ -7,19 +7,18 @@ define(['./SubTree', './type'], function(SubTree, type) {
     return acc;
   }
 
-  /**
-   *
-   * Create a new RTree.
-   *
-   * @param {Object} [configuration]
-   * @param {Number} [configuration.branchingFactor] branching factor of the tree (a node will be split when it has more children than the branching factor)
-   * @constructor
-   * @name RTree
-   */
-
 
   return type({
 
+    /**
+     *
+     * Create a new RTree.
+     *
+     * @param {Object} [configuration]
+     * @param {Number} [configuration.branchingFactor=16] branching factor of the tree. A node will be split when it has more children than the branching factor. Must be at least 3.
+     * @constructor
+     * @name RTree
+     */
     constructor: function(configuration) {
       configuration = configuration || {};
       this._branchingFactor = (configuration.branchingFactor >= 3) ? configuration.branchingFactor : 16;
@@ -27,6 +26,17 @@ define(['./SubTree', './type'], function(SubTree, type) {
       this._size = 0;
     },
 
+    /**
+     *
+     * Return the k nearest objects from the tree.
+     *
+     * @param {Number} x x coordinate of search position
+     * @param {Number} y y coordinate of search position
+     * @param {Number} k=1 how many
+     * @returns {Array} the results. This may be less than k if the size of the tree is smaller than k.
+     * @memberOf RTree#
+     * @function
+     */
     nearestNeighbours: (function() {
       var results;
 
@@ -54,10 +64,11 @@ define(['./SubTree', './type'], function(SubTree, type) {
     },
 
     /**
-     * Draws the rtree to a html5 canvas 2d context
+     * Draws the rtree to a html5 canvas 2d context (debug only).
      * @param {context2d} context2d HTML5 canvas 2d context
      * @function
      * @memberOf RTree#
+     * @private
      */
     draw: function(context2d) {
       if (this._root) {
@@ -76,11 +87,11 @@ define(['./SubTree', './type'], function(SubTree, type) {
     },
 
     /**
-     * Apply the callback to each object that interacts with the rectang.
-     * @param {Number} x
-     * @param {Number} y
-     * @param {Number} w
-     * @param {Number} h
+     * Apply the callback to each object that interacts with the rectangle.
+     * @param {Number} x the x coordinate of the rectangle
+     * @param {Number} y the y coordinate of the rectangle
+     * @param {Number} w the width of the rectangle
+     * @param {Number} h the height of the rectangle
      * @param {Function} action called for each element interacting with the rectang
      * @function
      * @memberOf RTree#
@@ -158,6 +169,8 @@ define(['./SubTree', './type'], function(SubTree, type) {
      * @param {Number} y the y coordinate of the rectangle
      * @param {Number} w the width of the rectangle
      * @param {Number} h the height of the rectangle* @returns {Array} objects interaction with the search rectang
+     * @returns {Array} the object which interact with the search rectangle
+     * @memberOf RTree#
      */
     search: function(x, y, w, h) {
       return this.reduceInRectangle(x, y, w, h, accumulate, []);
