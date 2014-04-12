@@ -7,22 +7,36 @@ A fast and memory-efficient 2D RTree implementation for Javascript.
 
 The RTree is available as an AMD package or a node package.
 
-
 ### Bower / AMD
 
+Use bower to install the AMD modules straigh from the source
+
+    > bower install https://bitbucket.org/trgn/rtree2d.git
+
+The modules are located under 'src'.
+
+Your path config would look something like...
+
+    require.config({
+        ...
+        paths: {
+           ...
+           package: "%PATH_TO_BOWER_COMPONENTS%/RTree2d/src"
+           ...
+        }
+        ...
+    })
 
 
 ### Node
 
-doc todo
+Use the node package manager to install the module
+
+    > npm install rtree2d
 
 ## Demo
 
 Take a test drive [here](http://neirynck.us/rtree).
-
-## Documentation
-
-[API Documentation](http://neirynck.us/rtree/jsdoc)
 
 ## At a glance
 
@@ -55,6 +69,10 @@ Take a test drive [here](http://neirynck.us/rtree).
 
     });
 
+## Documentation
+
+[API Documentation](http://neirynck.us/rtree/jsdoc)
+
 ### Code repository
 
 [Git repo on bitbucket](https://bitbucket.org/trgn/rtree2d)
@@ -69,7 +87,8 @@ Take a test drive [here](http://neirynck.us/rtree).
 
     > node setup.js
 
-3) (to build releases)
+3) build a release
 
     > cd build
-    >
+    > "../node_modules/.bin/jake" -f build.js release
+
