@@ -128,7 +128,7 @@ define([
 
       PRIORITY_QUEUE.clear();
       var node = this;
-      do {
+      while (k && node) {
         if (node.isEntry) {
           k -= 1;
           callback(node.object);
@@ -136,8 +136,7 @@ define([
           node._addToQueue(x, y);
         }
         node = PRIORITY_QUEUE.dequeue();
-      } while (k && node)
-
+      }
     },
 
     _search: function(x, y, w, h, callback) {

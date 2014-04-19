@@ -194,7 +194,6 @@ define(['./SubTree', './type'], function(SubTree, type) {
       }
       this._root._insert(object, x, y, w, h, this);
       this._size += 1;
-      return this;
     },
 
 
@@ -215,7 +214,6 @@ define(['./SubTree', './type'], function(SubTree, type) {
       if (removed) {
         this._size -= 1;
       }
-      return this;
     }
 
 

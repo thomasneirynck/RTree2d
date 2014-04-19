@@ -1,7 +1,7 @@
 RTree2d
 -------
 
-A fast and memory-efficient 2D RTree implementation for Javascript. Supports range searches and neirest neighbour searches.
+A fast and memory-efficient 2D RTree implementation for Javascript. Supports range searches and nearest neighbour searches.
 
 ## Installation
 
