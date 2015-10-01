@@ -25,7 +25,7 @@
         "test",
         "tests"
     ],
-    "dependencies": {
+    "devDependencies": {
         "qunit": "~1.14.0",
         "requirejs": "~2.1.11",
         "jquery": "~2.1.0"
