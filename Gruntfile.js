@@ -69,63 +69,32 @@ module.exports = function (grunt) {
     }
   });
 
-
-  grunt.registerTask("amdify", function () {
-
+  function wrapScript(inFile, out, start, end) {
     buildify()
-      .load("release/js/RTree2d.js")
+      .load(inFile)
       .perform(function (contents) {
-
-        contents =
-          "(function(){var scope = this;" +
-          contents +
-          "define([],function(){ return scope.RTree2d; });}).call({});";
-
-        return contents;
-
+        return start + contents + end;
       })
-      .save("release/js/RTree2d-amd.js");
+      .save(out);
+  }
 
 
-  });
-
-  grunt.registerTask("commonjsify", function () {
-
-    buildify()
-      .load("release/js/RTree2d.js")
-      .perform(function (contents) {
-
-        contents =
-          "(function(){var scope = this;" +
-          contents +
-          "exports.RTree2d=scope.RTree2d;}).call({});";
-
-        return contents;
-
-      })
-      .save("release/js/RTree2d-common.js");
-
-  });
+  grunt.registerTask("amdify", wrapScript.bind(null, "release/js/RTree2d.js", "release/js/RTree2d-amd.js", "(function(){var scope = this;", "define([],function(){ return scope.RTree2d; });}).call({});"));
+  grunt.registerTask("commonjsify", wrapScript.bind(null, "release/js/RTree2d.js", "release/js/RTree2d-common.js", "(function(){var scope = this;", "exports.RTree2d=scope.RTree2d;}).call({});"));
 
   grunt.registerTask('jsdoc', function() {
 
     var done = this.async();
     exec('"./node_modules/.bin/jsdoc" ./src/ ./README.md -d ./release/jsdoc -t "./build/jsdoctemplate"', function(err, stdout, sterr) {
-
       if (err || sterr) {
         console.error('jsdoc failed.', err, sterr);
         done();
       }
-
-
-      var b = buildify();
-      b
+      buildify()
         .load('./release/jsdoc/index.html')
         .perform(addGoogleAnalytics)
         .save('./release/jsdoc/index.html');
-
       done();
-
     });
 
   });
