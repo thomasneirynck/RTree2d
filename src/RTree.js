@@ -92,7 +92,7 @@ define(['./Branch', './type'], function(Branch, type) {
      * @param {Number} y the y coordinate of the rectangle
      * @param {Number} w the width of the rectangle
      * @param {Number} h the height of the rectangle
-     * @param {Function} action called for each element interacting with the rectang
+     * @param {Function} action called for each element interacting with the retangle
      * @function
      * @memberOf RTree#
      */
@@ -103,7 +103,7 @@ define(['./Branch', './type'], function(Branch, type) {
     },
 
     /**
-     * Apply the map function to each object that interacts with the rectang and add it to the result.
+     * Apply the map function to each object that interacts with the retangle and add it to the result.
 
      * @param {Number} x the x coordinate of the rectangle
      * @param {Number} y the y coordinate of the rectangle
@@ -135,7 +135,7 @@ define(['./Branch', './type'], function(Branch, type) {
      * @param {Number} y the y coordinate of the rectangle
      * @param {Number} w the width of the rectangle
      * @param {Number} h the height of the rectangle
-     * @param {Function} fold a reduce function, taking two arguments, the accumulator and an object interacting with the search rectang.
+     * @param {Function} fold a reduce function, taking two arguments, the accumulator and an object interacting with the search retangle.
      * @param {Object} [initial] initial accumulator
      * @returns {Object} accumulated value
      *
@@ -168,7 +168,7 @@ define(['./Branch', './type'], function(Branch, type) {
      * @param {Number} x the x coordinate of the rectangle
      * @param {Number} y the y coordinate of the rectangle
      * @param {Number} w the width of the rectangle
-     * @param {Number} h the height of the rectangle* @returns {Array} objects interaction with the search rectang
+     * @param {Number} h the height of the rectangle* @returns {Array} objects interaction with the search retangle
      * @returns {Array} the object which interact with the search rectangle
      * @memberOf RTree#
      */

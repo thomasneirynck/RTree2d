@@ -1,10 +1,20 @@
 var async = require("async");
 var buildify = require('buildify');
+var exec = require('child_process').exec;
 
 var releaseDir = "./release/";
 
 var srcDir = "./src/";
 var RTreeModule = srcDir + "RTree";
+
+
+var addGoogleAnalytics = function(content) {
+  var nb = buildify();
+  var ga = nb
+    .load('./build/parts/googleAnalytics.frag')
+    .content;
+  return content.replace('</head>', ga + "</head>");
+};
 
 module.exports = function (grunt) {
 
@@ -52,7 +62,8 @@ module.exports = function (grunt) {
           }
         },
         files: [
-          {cwd: "release/js", src: ["**"], dest: "js", filter: 'isFile', expand: true}
+          {cwd: "release/js", src: ["**"], dest: "js", filter: 'isFile', expand: true},
+          {cwd: "release/jsdoc", src: ["**"], dest: "jsdoc", filter: 'isFile', expand: true}
         ]
       }
     }
@@ -96,7 +107,30 @@ module.exports = function (grunt) {
 
   });
 
+  grunt.registerTask('jsdoc', function() {
 
-  grunt.registerTask("release", ["jshint", "requirejs", "amdify", "commonjsify", "compress"]);
+    var done = this.async();
+    exec('"./node_modules/.bin/jsdoc" ./src/ ./README.md -d ./release/jsdoc -t "./build/jsdoctemplate"', function(err, stdout, sterr) {
+
+      if (err || sterr) {
+        console.error('jsdoc failed.', err, sterr);
+        done();
+      }
+
+
+      var b = buildify();
+      b
+        .load('./release/jsdoc/index.html')
+        .perform(addGoogleAnalytics)
+        .save('./release/jsdoc/index.html');
+
+      done();
+
+    });
+
+  });
+
+
+  grunt.registerTask("release", ["jshint", "requirejs", "amdify", "commonjsify", "jsdoc","compress"]);
 
 };
