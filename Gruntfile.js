@@ -50,6 +50,20 @@ module.exports = function (grunt) {
             end: "root.RTree2d = require('src/RTree');}(this));"
           }
         }
+      },
+
+      demo: {
+        options: {
+          baseUrl: ".",
+          mainConfigFile: "demo/main.js",
+          name: "bower_components/almond/almond.js",
+          include: "demo/main.js",
+          out: releaseDir + "demo/main.js",
+          optimize: "uglify2",
+          options: {
+            mangle: true
+          }
+        }
       }
     },
 
@@ -63,6 +77,24 @@ module.exports = function (grunt) {
         files: [
           {cwd: "release/js", src: ["**"], dest: "js", filter: 'isFile', expand: true},
           {cwd: "release/jsdoc", src: ["**"], dest: "jsdoc", filter: 'isFile', expand: true}
+        ]
+      }
+    },
+
+    copy: {
+      demo: {
+        options: {
+          process: function (content, name) {
+            if (name === "demo/index.html") {
+              content = content.replace(/\<\!\-\-REQUIRE_SOURCE\-\-\>((.|[\r\n])*?)\<\!\-\-REQUIRE_SOURCE\-\-\>/g, ' <script src="main.js"></script>');
+              return content;
+            } else {
+              return content;
+            }
+          }
+        },
+        files: [
+          {expand: true, cwd: "demo", src: ['**', '!*.js'], dest: "release/demo", filter: 'isFile'}
         ]
       }
     }
