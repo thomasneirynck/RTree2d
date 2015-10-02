@@ -5,7 +5,6 @@ var exec = require('child_process').exec;
 var releaseDir = "./release/";
 
 var srcDir = "./src/";
-var RTreeModule = srcDir + "RTree";
 
 var addGoogleAnalytics = function(content) {
   var nb = buildify();
@@ -76,7 +75,8 @@ module.exports = function (grunt) {
         },
         files: [
           {cwd: "release/js", src: ["**"], dest: "js", filter: 'isFile', expand: true},
-          {cwd: "release/jsdoc", src: ["**"], dest: "jsdoc", filter: 'isFile', expand: true}
+//          {cwd: "release/jsdoc", src: ["**"], dest: "jsdoc", filter: 'isFile', expand: true}
+          {cwd: "release/demo", src: ["**"], dest: "demo", filter: 'isFile', expand: true}
         ]
       }
     },
@@ -95,6 +95,11 @@ module.exports = function (grunt) {
         },
         files: [
           {expand: true, cwd: "demo", src: ['**', '!*.js'], dest: "release/demo", filter: 'isFile'}
+        ]
+      },
+      js: {
+        files: [
+          {expand: true, cwd: "release/js", src: ['**'], dest: "release/demo/js", filter: 'isFile'}
         ]
       }
     }
@@ -115,7 +120,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('jsdoc', function() {
     var done = this.async();
-    exec('"./node_modules/.bin/jsdoc" ./src/ ./README.md -d ./release/jsdoc -t "./build/jsdoctemplate"', function(err, stdout, sterr) {
+    exec('"./node_modules/.bin/jsdoc" ./src/ ./README.md -d ./release/demo/jsdoc -t "./build/jsdoctemplate"', function(err, stdout, sterr) {
       if (err || sterr) {
         console.error('jsdoc failed.', err, sterr);
         done();
@@ -128,7 +133,7 @@ module.exports = function (grunt) {
     });
   });
 
-  grunt.registerTask("release", ["jshint", "requirejs", "amdify", "commonjsify", "jsdoc","compress"]);
+  grunt.registerTask("release", ["jshint", "requirejs", "amdify", "commonjsify", "copy", "jsdoc", "compress"]);
 
 };
 
