@@ -113,7 +113,7 @@ require([
     knn.forEach(function(result) {
       context2dOverlay.beginPath();
       context2dOverlay.moveTo(relX, relY);
-      context2dOverlay.lineTo(result.x + result.w / 2, result.y + result.h / 2)
+      context2dOverlay.lineTo(result.x + result.w / 2, result.y + result.h / 2);
       context2dOverlay.stroke();
     });
 

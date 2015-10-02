@@ -1,4 +1,4 @@
-define(['./SubTree', './type'], function(SubTree, type) {
+define(['./Branch', './type'], function(Branch, type) {
 
   "use strict";
 
@@ -19,7 +19,7 @@ define(['./SubTree', './type'], function(SubTree, type) {
      * @constructor
      * @name RTree
      */
-    constructor: function(configuration) {
+    constructor: function RTree(configuration) {
       configuration = configuration || {};
       this._branchingFactor = (configuration.branchingFactor >= 3) ? configuration.branchingFactor : 16;
       this._root = null;
@@ -56,7 +56,7 @@ define(['./SubTree', './type'], function(SubTree, type) {
 
 
     _growTree: function(node1, node2) {
-      var newRoot = new SubTree(node1.l, node1.b, node1.w, node1.h, this._branchingFactor);
+      var newRoot = new Branch(node1.l, node1.b, node1.w, node1.h, this._branchingFactor);
       newRoot._addChild(node1);
       newRoot._addChild(node2);
       newRoot.depth = this._root.depth + 1;//keep track of depth (debugging purposes only)
@@ -124,7 +124,7 @@ define(['./SubTree', './type'], function(SubTree, type) {
         mapfunc = func;
         this.forEachInRectangle(x, y, w, h, mapSpool);
         return maps;
-      }
+      };
     }()),
 
     /**
@@ -189,7 +189,7 @@ define(['./SubTree', './type'], function(SubTree, type) {
      */
     insert: function(object, x, y, w, h) {
       if (!this._root) {
-        this._root = new SubTree(x, y, w, h, this._branchingFactor);
+        this._root = new Branch(x, y, w, h, this._branchingFactor);
         this._root.leaf = true;
       }
       this._root._insert(object, x, y, w, h, this);

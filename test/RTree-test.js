@@ -73,14 +73,8 @@ define([
 
 
   test("insert", function() {
-
     var rt = new RTree();
-
-    var ob = {};
-    r = rt.insert(ob, 101, 101, 1, 1);
-
-    equal(r, rt, 'should return itself');
-
+    equal(undefined, rt.insert({}, 101, 101, 1, 1), 'should return nothing');
   });
 
   test("insert. x3", function() {

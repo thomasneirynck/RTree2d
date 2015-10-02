@@ -1,9 +1,9 @@
 define([
   './Rectangle',
-  './SubTreeDebugMixin',
+  './BranchMixin',
   './type',
   './PriorityQueue'
-], function(Rectangle, SubTreeDebugMixin, type, PriorityQueue) {
+], function(Rectangle, BranchMixin, type, PriorityQueue) {
 
   var PRIORITY_QUEUE = new PriorityQueue(function(node1, node2) {
     return node1.__dist - node2.__dist;
@@ -43,11 +43,13 @@ define([
   }
 
   function drawToContext(context, child) {
-    child.draw && child.draw(context);
+    if (child.draw) {
+      child.draw(context);
+    }
     return context;
   }
 
-  return type({}, Rectangle.prototype, SubTreeDebugMixin, {
+  return type({}, Rectangle.prototype, BranchMixin, {
     isEntry: false,
     constructor: function(x, y, w, h, bf) {
 
@@ -330,7 +332,7 @@ define([
       var child = this.__firstChild;
       while (child) {
         this.include(child.l, child.b, child.r, child.t);
-        child = child.__nextSibling
+        child = child.__nextSibling;
       }
     },
 

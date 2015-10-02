@@ -88,8 +88,6 @@ define(['./type'], function(type) {
     }
 
 
-
-
   });
 
 });

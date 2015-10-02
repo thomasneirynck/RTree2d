@@ -83,7 +83,9 @@ define([
 
     __validateChildren: function() {
       this.__getChildren().forEach(function(child) {
-        child.__validate && child.__validate();
+        if (child.__validate) {
+          child.__validate();
+        }
       });
     },
 
@@ -97,5 +99,5 @@ define([
 
     }
 
-  }
+  };
 });

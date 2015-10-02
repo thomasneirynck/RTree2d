@@ -35,6 +35,6 @@ define([], function() {
     }
     return proto.constructor;
 
-  }
+  };
 
 });
