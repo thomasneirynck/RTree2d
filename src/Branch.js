@@ -19,8 +19,8 @@ define([
       Rectangle.call(this, x, y, w, h);
     },
     draw: function(context) {
-      context.strokeStyle = 'rgba(0,0,255,1)';
-      context.strokeRect(this.l, this.b, this.w, this.h);
+      context.fillStyle = 'rgba(240,240,230,0.7)';
+      context.fillRect(this.l, this.b, this.w, this.h);
     },
     toString: function() {
       var s = Rectangle.prototype.toString.call(this);
@@ -75,8 +75,8 @@ define([
     },
 
     draw: function(context2d) {
-      context2d.lineWidth = this.depth + 1;
-      context2d.strokeStyle = this.leaf ? 'rgba(255,0,0,1)' : 'rgba(0,0,0,1)';
+      context2d.lineWidth = Math.ceil((this.depth + 1)/2);
+      context2d.strokeStyle = this.leaf ? 'rgba(205,192,176,0.8)' : 'rgba(139,131,120,0.9)';
       context2d.strokeRect(this.l, this.b, this.w, this.h);
       this._foldChildren(drawToContext, context2d);
     },

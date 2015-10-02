@@ -7,7 +7,6 @@ var releaseDir = "./release/";
 var srcDir = "./src/";
 var RTreeModule = srcDir + "RTree";
 
-
 var addGoogleAnalytics = function(content) {
   var nb = buildify();
   var ga = nb
@@ -83,7 +82,6 @@ module.exports = function (grunt) {
   grunt.registerTask("commonjsify", wrapScript.bind(null, "release/js/RTree2d.js", "release/js/RTree2d-common.js", "(function(){var scope = this;", "exports.RTree2d=scope.RTree2d;}).call({});"));
 
   grunt.registerTask('jsdoc', function() {
-
     var done = this.async();
     exec('"./node_modules/.bin/jsdoc" ./src/ ./README.md -d ./release/jsdoc -t "./build/jsdoctemplate"', function(err, stdout, sterr) {
       if (err || sterr) {
@@ -96,10 +94,9 @@ module.exports = function (grunt) {
         .save('./release/jsdoc/index.html');
       done();
     });
-
   });
-
 
   grunt.registerTask("release", ["jshint", "requirejs", "amdify", "commonjsify", "jsdoc","compress"]);
 
 };
+

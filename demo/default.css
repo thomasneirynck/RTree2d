@@ -1,11 +1,18 @@
 html, body {
     /*font from http://cssfontstack.com/*/
     font-family: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+    margin: auto 0;
+    width: 100%;
+    height: 100%;
 }
 
 #page {
     width: 95%;
     margin-left: auto ;
     margin-right: auto ;
+}
+
+#canv {
+    position: absolute;
 }
 

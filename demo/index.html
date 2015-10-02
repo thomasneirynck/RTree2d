@@ -4,78 +4,16 @@
     <title>Javascript RTree (AMD module)</title>
     <link rel="stylesheet" type="text/css" href="./default.css">
 
-    <!--amdloader-->
-    <script type="text/javascript" src="../bower_components/requirejs/require.js"></script>
-    <!--amdloader-->
-
-    <!--bootstrap-->
-    <script type="text/javascript" src="./run.js"></script>
-    <!--bootstrap-->
-
-    <!--<script type="text/javascript" src="../release/js/RTree2d.js"></script>-->
-
+    <!--script-->
+    <script type="text/javascript" data-main="main.js" src="../bower_components/requirejs/require.js"></script>
+    <!--script-->
 
 </head>
 <body>
 
-<div id="page">
+<canvas id="canv">
 
-    <h1>Javascript RTree</h1>
-
-    <h2>Documentation and source code</h2>
-
-    <p>
-        <span><a href="https://bitbucket.org/trgn/rtree">Repository + readme</a></span>
-        <span><a href="./jsdoc">API Docs</a></span>
-    </p>
-
-    <h2>Try it!</h2>
-
-    <div>
-        Insert objects in the tree, as well as perform searches. Check the checkbox to visualize the tree.
-        Time measurements only include RTree operations. The rendering of the tree is excluded.
-    </div>
-
-    <div id="sample_app">
-
-        <div>
-            <div>
-                <div>
-                    <input type="button" id="reset" value="Reset the tree"/>
-                </div>
-                <div>
-                    <input type="button" value="insert 1 object" data-nr='1'/>
-                    <input type="button" value="insert 10 objects" data-nr='10'/>
-                    <input type="button" value="insert 100 objects" data-nr='100'/>
-                    <input type="button" value="insert 1000 objects" data-nr='1000'/>
-                    <input type="button" value="insert 10000 objects" data-nr='10000'/>
-                    <input type="button" value="insert 100000 objects" data-nr='100000'/>
-                    <input type="button" value="insert 1000000 objects (danger! high voltage!)" data-nr='1000000'/>
-                </div>
-                <div>
-                    Show the current tree (not for the faint of heart): <input type="checkbox" id="draw" value="draw"
-                                                                               checked="true"/>
-                </div>
-                <div id="message"></div>
-                <div id="search"></div>
-            </div>
-
-
-            <div id="map" style="position:relative; border: 1px solid black; width: auto; height: auto">
-                <canvas width="0px" height="400px"
-                        style="position: absolute; left: 0; right: 0; z-index: 1"
-                        id="canvOverlay"></canvas>
-                <canvas width="0px" height="400px"
-                        style="position: absolute; left: 0; right: 0;z-index: 0"
-                        id="canv"></canvas>
-            </div>
-
-
-        </div>
-
-
-    </div>
-</div>
+</canvas>
 
 </body>
 </html>
