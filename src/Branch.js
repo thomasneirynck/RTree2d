@@ -75,8 +75,8 @@ define([
     },
 
     draw: function(context2d) {
-      context2d.lineWidth = Math.ceil((this.depth + 1)/2);
-      context2d.strokeStyle = this.leaf ? 'rgba(205,192,176,0.8)' : 'rgba(139,131,120,0.9)';
+      context2d.lineWidth = Math.ceil((this.depth + 1)/3);
+      context2d.strokeStyle = this.leaf ? 'rgba(205,192,176,0.8)' : 'rgba(139,131,120,0.6)';
       context2d.strokeRect(this.l, this.b, this.w, this.h);
       this._foldChildren(drawToContext, context2d);
     },
