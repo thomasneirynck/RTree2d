@@ -74,9 +74,8 @@ module.exports = function (grunt) {
           }
         },
         files: [
-          {cwd: "release/js", src: ["**"], dest: "js", filter: 'isFile', expand: true},
-//          {cwd: "release/jsdoc", src: ["**"], dest: "jsdoc", filter: 'isFile', expand: true}
-          {cwd: "release/demo", src: ["**"], dest: "demo", filter: 'isFile', expand: true}
+          {cwd: "release/js", src: ["**"], dest: "rtree2d/js", filter: 'isFile', expand: true},
+          {cwd: "release/demo", src: ["**"], dest: "rtree2d/demo", filter: 'isFile', expand: true}
         ]
       }
     },
