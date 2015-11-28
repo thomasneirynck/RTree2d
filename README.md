@@ -48,7 +48,7 @@ Take a test drive [here](http://rtree2d.hepburnave.com).
 
 ## Code repository
 
-[Git repo on bitbucket](https://bitbucket.org/trgn/rtree2d)
+[Git repo on bitbucket](https://github.com/hepburnave/RTree2d)
 
 ## Dev project setup
 
