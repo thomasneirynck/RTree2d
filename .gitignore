@@ -1,6 +1,8 @@
 rtree2d.iml
 .idea
 bower_components
-release
+release/rtree2d.zip
+release/demo
+release/jsdoc
 rtree2d.zip
 node_modules
