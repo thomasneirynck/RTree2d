@@ -54,7 +54,7 @@ Take a test drive [here](http://rtree2d.hepburnave.com).
 
 1) checkout repo
 
-    > git clone https://bitbucket.org/trgn/rtree2d.git
+    > git clone https://github.com/hepburnave/RTree2d.git
 
 2) run node setup script (might need admin priviliges on windows)
 
