@@ -5,42 +5,16 @@ A fast and memory-efficient 2D RTree implementation for Javascript. Supports ran
 
 ## Installation
 
-The RTree is available as an AMD package or a node package.
-
-### Bower / AMD
-
-Use bower to install the AMD modules straigh from the source
-
-    > bower install https://bitbucket.org/trgn/rtree2d.git
-
-The modules are located under 'src'.
-
-Your path config would look something like...
-
-    require.config({
-        ...
-        paths: {
-           ...
-           package: "%PATH_TO_BOWER_COMPONENTS%/RTree2d/src"
-           ...
-        }
-        ...
-    })
-
-
-### Node
-
-Use the node package manager to install the module
-
-    > npm install rtree2d
+The RTree is available as:
+- script: **./release/js/RTree2d.js** (adds a global variable with the name `RTree2d`)
+- an AMD module: **./release/js/RTree2d-amd.js**
+- an CommonJS module: **./release/js/RTree2d-common.js**
 
 ## Demo
 
-Take a test drive [here](http://neirynck.us/rtree).
+Take a test drive [here](http://rtree2d.hepburnave.com).
 
 ## At a glance
-
-    define(['package/RTree2d'], function(RTree2d){
 
         var rtree = new RTree2d();
 
@@ -65,19 +39,18 @@ Take a test drive [here](http://neirynck.us/rtree).
         var size = rtree.size();
 
         //Remove an element.
-        var newSizeOfTree = domainOb.remove(ob,2,3,4,5);
+        domainOb.remove(ob,2,3,4,5);
 
-    });
 
 ## Documentation
 
-[API Documentation](http://neirynck.us/rtree/jsdoc)
+[API Documentation](http://rtree2d.hepburnave.com/jsdoc/)
 
-### Code repository
+## Code repository
 
 [Git repo on bitbucket](https://bitbucket.org/trgn/rtree2d)
 
-##Dev project setup
+## Dev project setup
 
 1) checkout repo
 
@@ -89,5 +62,5 @@ Take a test drive [here](http://neirynck.us/rtree).
 
 3) build a release
 
-    > "./node_modules/.bin/jake" -f build.js release
+    > grunt release
 
