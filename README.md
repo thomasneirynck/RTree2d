@@ -28,7 +28,7 @@ Take a test drive [here](http://rtree2d.hepburnave.com).
 
     //Instead of using search, you can also use one of the collection comprehension methods.
     //(e.g. you might be doing a search 60 frames-per-second. You do not want a new array each time).
-    rtree.forEachinRectangle(0,0,10,10, function(ob){
+    rtree.forEachInRectangle(0,0,10,10, function(ob){
         console.log("i got a hit, ",ob);
     });
 
