@@ -8,7 +8,7 @@ A fast and memory-efficient 2D RTree implementation for Javascript. Supports ran
 The RTree is available as:
 - script: **./release/js/RTree2d.js** (adds a global variable with the name `RTree2d`)
 - an AMD module: **./release/js/RTree2d-amd.js**
-- an CommonJS module: **./release/js/RTree2d-common.js**
+- a CommonJS module: **./release/js/RTree2d-common.js**
 
 ## Demo
 
